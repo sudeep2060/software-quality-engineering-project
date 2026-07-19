@@ -43,20 +43,22 @@ class InventoryPage:
 
     def open_cart(self):
         cart = self.wait.until(
-            EC.presence_of_element_located(self.CART_ICON)
-        )
+        EC.element_to_be_clickable(self.CART_ICON)
+    )
 
         self.driver.execute_script(
-            "arguments[0].scrollIntoView(true);", cart
-        )
-        self.driver.execute_script(
-            "arguments[0].click();", cart
-        )
+        "arguments[0].click();",
+        cart
+    )
+
+    # Wait until cart page is loaded
+        self.wait.until(
+        lambda d: "cart.html" in d.current_url
+    )
 
         self.wait.until(
-            EC.presence_of_element_located(self.CHECKOUT_BUTTON)
-        )
-
+        EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
+    )
     # -------- Get Information --------
     def get_cart_count(self):
         return self.wait.until(
