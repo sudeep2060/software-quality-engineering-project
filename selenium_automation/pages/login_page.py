@@ -9,24 +9,25 @@ class LoginPage:
     PASSWORD = (By.ID, "password")
     LOGIN_BUTTON = (By.ID, "login-button")
     ERROR_MESSAGE = (By.CSS_SELECTOR, "h3[data-test='error']")
+    INVENTORY_CONTAINER = (By.ID, "inventory_container")
 
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 20)
 
     def enter_username(self, username):
-        username_field = self.wait.until(
+        field = self.wait.until(
             EC.visibility_of_element_located(self.USERNAME)
         )
-        username_field.clear()
-        username_field.send_keys(username)
+        field.clear()
+        field.send_keys(username)
 
     def enter_password(self, password):
-        password_field = self.wait.until(
+        field = self.wait.until(
             EC.visibility_of_element_located(self.PASSWORD)
         )
-        password_field.clear()
-        password_field.send_keys(password)
+        field.clear()
+        field.send_keys(password)
 
     def click_login(self):
         self.wait.until(
@@ -38,14 +39,24 @@ class LoginPage:
         self.enter_password(password)
         self.click_login()
 
-        # Wait until inventory page is fully loaded
-        self.wait.until(
-            EC.visibility_of_element_located(
-                (By.ID, "inventory_container")
+        # Success login
+        if username == "standard_user":
+            self.wait.until(
+                EC.visibility_of_element_located(
+                    self.INVENTORY_CONTAINER
+                )
             )
-        )
+        # Invalid login
+        else:
+            self.wait.until(
+                EC.visibility_of_element_located(
+                    self.ERROR_MESSAGE
+                )
+            )
 
     def get_error_message(self):
         return self.wait.until(
-            EC.visibility_of_element_located(self.ERROR_MESSAGE)
+            EC.visibility_of_element_located(
+                self.ERROR_MESSAGE
+            )
         ).text

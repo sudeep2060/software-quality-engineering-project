@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def get_driver():
@@ -11,9 +13,13 @@ def get_driver():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
 
-    driver = webdriver.Chrome(options=options)
+    service = Service(ChromeDriverManager().install())
+
+    driver = webdriver.Chrome(
+        service=service,
+        options=options
+    )
 
     driver.set_page_load_timeout(30)
-    driver.implicitly_wait(0)
 
     return driver

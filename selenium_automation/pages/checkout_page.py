@@ -6,11 +6,9 @@ from selenium.webdriver.support import expected_conditions as EC
 class CheckoutPage:
 
     CHECKOUT_BUTTON = (By.ID, "checkout")
-
     FIRST_NAME = (By.ID, "first-name")
     LAST_NAME = (By.ID, "last-name")
     POSTAL_CODE = (By.ID, "postal-code")
-
     CONTINUE_BUTTON = (By.ID, "continue")
     FINISH_BUTTON = (By.ID, "finish")
 
@@ -32,71 +30,78 @@ class CheckoutPage:
 
     def enter_first_name(self, firstname):
         field = self.wait.until(
-            EC.presence_of_element_located(self.FIRST_NAME)
+            EC.element_to_be_clickable(self.FIRST_NAME)
         )
-
-        self.driver.execute_script(
-            "arguments[0].value = arguments[1];",
-            field,
-            firstname
-        )
-
-        assert field.get_attribute("value") == firstname
+        field.clear()
+        field.send_keys(firstname)
 
     def enter_last_name(self, lastname):
         field = self.wait.until(
-            EC.presence_of_element_located(self.LAST_NAME)
+            EC.element_to_be_clickable(self.LAST_NAME)
         )
-
-        self.driver.execute_script(
-            "arguments[0].value = arguments[1];",
-            field,
-            lastname
-        )
-
-        assert field.get_attribute("value") == lastname
+        field.clear()
+        field.send_keys(lastname)
 
     def enter_postal_code(self, postal):
         field = self.wait.until(
-            EC.presence_of_element_located(self.POSTAL_CODE)
+            EC.element_to_be_clickable(self.POSTAL_CODE)
         )
-
-        self.driver.execute_script(
-            "arguments[0].value = arguments[1];",
-            field,
-            postal
-        )
-
-        assert field.get_attribute("value") == postal
+        field.clear()
+        field.send_keys(postal)
 
     def click_continue(self):
 
         print("===== Checkout Debug =====")
-        print("First Name :", self.driver.find_element(*self.FIRST_NAME).get_attribute("value"))
-        print("Last Name  :", self.driver.find_element(*self.LAST_NAME).get_attribute("value"))
-        print("Postal Code:", self.driver.find_element(*self.POSTAL_CODE).get_attribute("value"))
+        print("URL:", self.driver.current_url)
+        print("First :", self.driver.find_element(*self.FIRST_NAME).get_attribute("value"))
+        print("Last  :", self.driver.find_element(*self.LAST_NAME).get_attribute("value"))
+        print("Postal:", self.driver.find_element(*self.POSTAL_CODE).get_attribute("value"))
         print("==========================")
 
-        continue_button = self.wait.until(
+        button = self.wait.until(
             EC.element_to_be_clickable(self.CONTINUE_BUTTON)
         )
 
-        continue_button.click()
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            button
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            button
+        )
 
         errors = self.driver.find_elements(*self.ERROR_MESSAGE)
         if errors:
             raise AssertionError(errors[0].text)
 
         self.wait.until(
+            EC.url_contains("checkout-step-two")
+        )
+
+        self.wait.until(
             EC.visibility_of_element_located(self.FINISH_BUTTON)
         )
 
     def click_finish(self):
-        finish = self.wait.until(
+        button = self.wait.until(
             EC.element_to_be_clickable(self.FINISH_BUTTON)
         )
 
-        finish.click()
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            button
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            button
+        )
+
+        self.wait.until(
+            EC.url_contains("checkout-complete")
+        )
 
         self.wait.until(
             EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
