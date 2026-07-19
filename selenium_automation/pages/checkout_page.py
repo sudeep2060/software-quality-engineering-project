@@ -25,14 +25,13 @@ class CheckoutPage:
     # -------- Actions --------
     def click_checkout(self):
         checkout = self.wait.until(
-        EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
-    )
-
-        self.driver.execute_script("arguments[0].click();", checkout)
+            EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
+        )
+        checkout.click()
 
         self.wait.until(
-        EC.visibility_of_element_located(self.FIRST_NAME)
-    )
+            EC.visibility_of_element_located(self.FIRST_NAME)
+        )
 
     def enter_first_name(self, firstname):
         self.wait.until(
@@ -50,10 +49,20 @@ class CheckoutPage:
             EC.element_to_be_clickable(self.CONTINUE_BUTTON)
         ).click()
 
-    def click_finish(self):
+        # Wait until the overview page loads
         self.wait.until(
+            EC.visibility_of_element_located(self.FINISH_BUTTON)
+        )
+
+    def click_finish(self):
+        finish = self.wait.until(
             EC.element_to_be_clickable(self.FINISH_BUTTON)
-        ).click()
+        )
+        finish.click()
+
+        self.wait.until(
+            EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
+        )
 
     def complete_checkout(self, firstname, lastname, postal):
         self.click_checkout()
