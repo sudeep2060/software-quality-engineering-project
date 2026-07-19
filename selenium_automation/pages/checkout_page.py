@@ -26,10 +26,9 @@ class CheckoutPage:
         EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
     )
 
-        checkout.click()
-
-        self.wait.until(
-        EC.url_contains("checkout-step-one")
+        self.driver.execute_script(
+        "arguments[0].click();",
+        checkout
     )
 
         self.wait.until(

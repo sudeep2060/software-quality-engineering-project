@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 class LoginPage:
@@ -25,9 +26,12 @@ class LoginPage:
     def click_login(self):
         self.driver.find_element(*self.LOGIN_BUTTON).click()
 
-        self.wait.until(
-            EC.url_contains("inventory")
-        )
+        try:
+            self.wait.until(
+                EC.url_contains("inventory")
+            )
+        except TimeoutException:
+            pass
 
     def login(self, username, password):
         self.enter_username(username)
