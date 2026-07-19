@@ -44,21 +44,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: cypress_automation
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Cypress Run
+        uses: cypress-io/github-action@v6
         with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run Cypress Tests
-        run: npx cypress run
+          working-directory: cypress_automation

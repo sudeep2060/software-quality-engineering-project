@@ -42,6 +42,10 @@ class CheckoutPage:
         field.clear()
         field.send_keys(firstname)
 
+        self.wait.until(
+            lambda d: field.get_attribute("value") == firstname
+        )
+
     def enter_last_name(self, lastname):
         field = self.wait.until(
             EC.visibility_of_element_located(self.LAST_NAME)
@@ -49,12 +53,20 @@ class CheckoutPage:
         field.clear()
         field.send_keys(lastname)
 
+        self.wait.until(
+            lambda d: field.get_attribute("value") == lastname
+        )
+
     def enter_postal_code(self, postal):
         field = self.wait.until(
             EC.visibility_of_element_located(self.POSTAL_CODE)
         )
         field.clear()
         field.send_keys(postal)
+
+        self.wait.until(
+            lambda d: field.get_attribute("value") == postal
+        )
 
     def click_continue(self):
         continue_button = self.wait.until(
@@ -68,7 +80,9 @@ class CheckoutPage:
 
         errors = self.driver.find_elements(*self.ERROR_MESSAGE)
         if errors:
-            raise AssertionError(f"Checkout validation failed: {errors[0].text}")
+            raise AssertionError(
+                f"Checkout validation failed: {errors[0].text}"
+            )
 
         self.wait.until(
             EC.element_to_be_clickable(self.FINISH_BUTTON)
