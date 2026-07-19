@@ -28,8 +28,11 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install Google Chrome
+      - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
+
+      - name: Check Chrome Version
+        run: google-chrome --version
 
       - name: Install Dependencies
         run: |
