@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class CheckoutPage:
@@ -11,7 +13,6 @@ class CheckoutPage:
     POSTAL_CODE = (By.ID, "postal-code")
 
     CONTINUE_BUTTON = (By.ID, "continue")
-
     FINISH_BUTTON = (By.ID, "finish")
 
     SUCCESS_MESSAGE = (By.CLASS_NAME, "complete-header")
@@ -19,13 +20,23 @@ class CheckoutPage:
     # -------- Constructor --------
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
 
     # -------- Actions --------
     def click_checkout(self):
-        self.driver.find_element(*self.CHECKOUT_BUTTON).click()
+        self.wait.until(
+            EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
+        ).click()
+
+        # Wait until checkout information page loads
+        self.wait.until(
+            EC.visibility_of_element_located(self.FIRST_NAME)
+        )
 
     def enter_first_name(self, firstname):
-        self.driver.find_element(*self.FIRST_NAME).send_keys(firstname)
+        self.wait.until(
+            EC.visibility_of_element_located(self.FIRST_NAME)
+        ).send_keys(firstname)
 
     def enter_last_name(self, lastname):
         self.driver.find_element(*self.LAST_NAME).send_keys(lastname)
@@ -34,10 +45,14 @@ class CheckoutPage:
         self.driver.find_element(*self.POSTAL_CODE).send_keys(postal)
 
     def click_continue(self):
-        self.driver.find_element(*self.CONTINUE_BUTTON).click()
+        self.wait.until(
+            EC.element_to_be_clickable(self.CONTINUE_BUTTON)
+        ).click()
 
     def click_finish(self):
-        self.driver.find_element(*self.FINISH_BUTTON).click()
+        self.wait.until(
+            EC.element_to_be_clickable(self.FINISH_BUTTON)
+        ).click()
 
     def complete_checkout(self, firstname, lastname, postal):
         self.click_checkout()
@@ -48,4 +63,6 @@ class CheckoutPage:
         self.click_finish()
 
     def get_success_message(self):
-        return self.driver.find_element(*self.SUCCESS_MESSAGE).text
+        return self.wait.until(
+            EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
+        ).text
