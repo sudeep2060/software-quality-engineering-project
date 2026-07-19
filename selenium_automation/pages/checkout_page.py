@@ -25,13 +25,15 @@ class CheckoutPage:
     # -------- Actions --------
     def click_checkout(self):
         checkout = self.wait.until(
-            EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
-        )
-        checkout.click()
+        EC.presence_of_element_located(self.CHECKOUT_BUTTON)
+    )
+
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", checkout)
+        self.driver.execute_script("arguments[0].click();", checkout)
 
         self.wait.until(
-            EC.visibility_of_element_located(self.FIRST_NAME)
-        )
+        EC.url_contains("checkout-step-one")
+    )
 
     def enter_first_name(self, firstname):
         self.wait.until(
@@ -45,9 +47,15 @@ class CheckoutPage:
         self.driver.find_element(*self.POSTAL_CODE).send_keys(postal)
 
     def click_continue(self):
+        continue_btn = self.wait.until(
+        EC.presence_of_element_located(self.CONTINUE_BUTTON)
+    )
+
+        self.driver.execute_script("arguments[0].click();", continue_btn)
+
         self.wait.until(
-        EC.element_to_be_clickable(self.CONTINUE_BUTTON)
-    ).click()
+        EC.url_contains("checkout-step-two")
+    )
         
 
         print("===== DEBUG =====")
@@ -65,13 +73,14 @@ class CheckoutPage:
 
     def click_finish(self):
         finish = self.wait.until(
-            EC.element_to_be_clickable(self.FINISH_BUTTON)
-        )
-        finish.click()
+        EC.presence_of_element_located(self.FINISH_BUTTON)
+    )
+
+        self.driver.execute_script("arguments[0].click();", finish)
 
         self.wait.until(
-            EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
-        )
+        EC.url_contains("checkout-complete")
+    )
 
     def complete_checkout(self, firstname, lastname, postal):
         self.click_checkout()
