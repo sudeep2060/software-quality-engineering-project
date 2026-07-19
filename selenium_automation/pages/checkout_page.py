@@ -46,13 +46,22 @@ class CheckoutPage:
 
     def click_continue(self):
         self.wait.until(
-            EC.element_to_be_clickable(self.CONTINUE_BUTTON)
-        ).click()
+        EC.element_to_be_clickable(self.CONTINUE_BUTTON)
+    ).click()
+        
 
-        # Wait until the overview page loads
+        print("===== DEBUG =====")
+        print("Current URL:", self.driver.current_url)
+        print("Page Title:", self.driver.title)
+        print("Finish buttons found:", len(self.driver.find_elements(*self.FINISH_BUTTON)))
+        print("Page Source:")
+        print(self.driver.page_source[:3000])   # first 3000 characters
+        print("=================")
+
+
         self.wait.until(
-            EC.visibility_of_element_located(self.FINISH_BUTTON)
-        )
+        EC.visibility_of_element_located(self.FINISH_BUTTON)
+    )
 
     def click_finish(self):
         finish = self.wait.until(
