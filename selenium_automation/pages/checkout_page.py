@@ -23,13 +23,26 @@ class CheckoutPage:
 
     def click_checkout(self):
         checkout = self.wait.until(
-            EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
-        )
-        checkout.click()
+        EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
+    )
+
+        self.driver.execute_script(
+        "arguments[0].scrollIntoView({block:'center'});",
+        checkout
+    )
+
+        self.driver.execute_script(
+        "arguments[0].click();",
+        checkout
+    )
 
         self.wait.until(
-            EC.visibility_of_element_located(self.FIRST_NAME)
-        )
+        EC.url_contains("checkout-step-one")
+    )
+
+        self.wait.until(
+        EC.visibility_of_element_located(self.FIRST_NAME)
+    )
 
     def enter_first_name(self, firstname):
         field = self.wait.until(
