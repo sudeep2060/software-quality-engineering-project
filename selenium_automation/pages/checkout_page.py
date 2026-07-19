@@ -22,13 +22,19 @@ class CheckoutPage:
         self.wait = WebDriverWait(driver, 10)
 
     def click_checkout(self):
-        self.wait.until(
-            EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
-        ).click()
+        checkout = self.wait.until(
+        EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
+    )
+
+        checkout.click()
 
         self.wait.until(
-            EC.visibility_of_element_located(self.FIRST_NAME)
-        )
+        EC.url_contains("checkout-step-one")
+    )
+
+        self.wait.until(
+        EC.visibility_of_element_located(self.FIRST_NAME)
+    )
 
     def enter_first_name(self, firstname):
         field = self.wait.until(
