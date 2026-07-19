@@ -48,22 +48,40 @@ class CheckoutPage:
         field = self.wait.until(
             EC.element_to_be_clickable(self.FIRST_NAME)
         )
+
+        self.driver.execute_script("arguments[0].focus();", field)
         field.clear()
         field.send_keys(firstname)
+
+        self.wait.until(
+            lambda d: field.get_attribute("value") == firstname
+        )
 
     def enter_last_name(self, lastname):
         field = self.wait.until(
             EC.element_to_be_clickable(self.LAST_NAME)
         )
+
+        self.driver.execute_script("arguments[0].focus();", field)
         field.clear()
         field.send_keys(lastname)
+
+        self.wait.until(
+            lambda d: field.get_attribute("value") == lastname
+        )
 
     def enter_postal_code(self, postal):
         field = self.wait.until(
             EC.element_to_be_clickable(self.POSTAL_CODE)
         )
+
+        self.driver.execute_script("arguments[0].focus();", field)
         field.clear()
         field.send_keys(postal)
+
+        self.wait.until(
+            lambda d: field.get_attribute("value") == postal
+        )
 
     def click_continue(self):
         continue_button = self.wait.until(
@@ -117,9 +135,18 @@ class CheckoutPage:
 
     def complete_checkout(self, firstname, lastname, postal):
         self.click_checkout()
+
         self.enter_first_name(firstname)
         self.enter_last_name(lastname)
         self.enter_postal_code(postal)
+
+        # Debug output for GitHub Actions
+        print("===== FIELD VALUES =====")
+        print("First Name:", self.driver.find_element(*self.FIRST_NAME).get_attribute("value"))
+        print("Last Name :", self.driver.find_element(*self.LAST_NAME).get_attribute("value"))
+        print("Postal    :", self.driver.find_element(*self.POSTAL_CODE).get_attribute("value"))
+        print("========================")
+
         self.click_continue()
         self.click_finish()
 
