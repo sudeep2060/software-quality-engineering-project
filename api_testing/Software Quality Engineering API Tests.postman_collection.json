@@ -1,0 +1,275 @@
+{
+  "info": {
+    "_postman_id": "6eccbbd8-634b-4621-91c9-1bf9fe12a25e",
+    "name": "Software Quality Engineering API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55906671",
+    "_collection_link": "https://go.postman.co/collection/55906671-6eccbbd8-634b-4621-91c9-1bf9fe12a25e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "API001 - Get All Posts",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 3000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response body is not empty\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API002 – Get Single Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response contains ID 1\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response contains title\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.title).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 3000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts/1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API003 - Create Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response contains correct title\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.title).to.eql(\"Software Quality Engineering\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response contains correct userId\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.userId).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"ID is generated\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id).to.exist;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 3000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"Software Quality Engineering\",\r\n    \"body\": \"API Testing using Postman\",\r\n    \"userId\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API004 - Update Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Title updated correctly\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.title).to.eql(\"Updated Title\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Body updated correctly\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.body).to.eql(\"Updated using Postman\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is correct\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.userId).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 3000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"Updated Title\",\r\n    \"body\": \"Updated using Postman\",\r\n    \"userId\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts/1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API005 - Delete Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response body is empty\", function () {\r",
+              "    pm.expect(pm.response.text()).to.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 3000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts/1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
