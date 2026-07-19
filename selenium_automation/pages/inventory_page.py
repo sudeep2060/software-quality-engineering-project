@@ -30,22 +30,27 @@ class InventoryPage:
             EC.visibility_of_element_located(self.CART_BADGE)
         )
 
-    def remove_backpack(self):
-        self.wait.until(
-        EC.element_to_be_clickable(self.REMOVE_BACKPACK)
-    ).click()
-
-        self.wait.until(
-        EC.invisibility_of_element_located(self.CART_BADGE)
+    def open_cart(self):
+        cart = self.wait.until(
+        EC.element_to_be_clickable(self.CART_ICON)
     )
 
-    def open_cart(self):
-        self.wait.until(
-        EC.element_to_be_clickable(self.CART_ICON)
-    ).click()
+        self.driver.execute_script("arguments[0].click();", cart)
 
         self.wait.until(
-        EC.presence_of_element_located((By.ID, "checkout"))
+        EC.visibility_of_element_located((By.ID, "checkout"))
+    )
+
+
+def remove_backpack(self):
+    remove = self.wait.until(
+        EC.element_to_be_clickable(self.REMOVE_BACKPACK)
+    )
+
+    self.driver.execute_script("arguments[0].click();", remove)
+
+    self.wait.until(
+        EC.invisibility_of_element_located(self.CART_BADGE)
     )
 
     # -------- Get Information --------

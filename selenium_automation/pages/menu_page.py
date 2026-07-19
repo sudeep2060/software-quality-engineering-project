@@ -1,22 +1,38 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class MenuPage:
 
-    # ---------- Locators ----------
     MENU_BUTTON = (By.ID, "react-burger-menu-btn")
     LOGOUT_LINK = (By.ID, "logout_sidebar_link")
 
-    # ---------- Constructor ----------
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
 
-    # ---------- Actions ----------
     def open_menu(self):
-        self.driver.find_element(*self.MENU_BUTTON).click()
+        menu = self.wait.until(
+            EC.element_to_be_clickable(self.MENU_BUTTON)
+        )
+
+        self.driver.execute_script("arguments[0].click();", menu)
+
+        self.wait.until(
+            EC.visibility_of_element_located(self.LOGOUT_LINK)
+        )
 
     def click_logout(self):
-        self.driver.find_element(*self.LOGOUT_LINK).click()
+        logout = self.wait.until(
+            EC.element_to_be_clickable(self.LOGOUT_LINK)
+        )
+
+        self.driver.execute_script("arguments[0].click();", logout)
+
+        self.wait.until(
+            EC.url_contains("saucedemo.com")
+        )
 
     def logout(self):
         self.open_menu()

@@ -24,14 +24,15 @@ class CheckoutPage:
 
     # -------- Actions --------
     def click_checkout(self):
-        self.wait.until(
-            EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
-        ).click()
+        checkout = self.wait.until(
+        EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
+    )
 
-        # Wait until checkout information page loads
+        self.driver.execute_script("arguments[0].click();", checkout)
+
         self.wait.until(
-            EC.visibility_of_element_located(self.FIRST_NAME)
-        )
+        EC.visibility_of_element_located(self.FIRST_NAME)
+    )
 
     def enter_first_name(self, firstname):
         self.wait.until(
