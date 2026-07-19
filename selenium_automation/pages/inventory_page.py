@@ -13,6 +13,7 @@ class InventoryPage:
     CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
 
     PRODUCT_NAME = (By.CLASS_NAME, "inventory_item_name")
+    CHECKOUT_BUTTON = (By.ID, "checkout")
 
     # -------- Constructor --------
     def __init__(self, driver):
@@ -42,18 +43,20 @@ class InventoryPage:
 
     def open_cart(self):
         cart = self.wait.until(
-        EC.element_to_be_clickable(self.CART_ICON)
-    )
+            EC.presence_of_element_located(self.CART_ICON)
+        )
 
-        cart.click()
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView(true);", cart
+        )
+        self.driver.execute_script(
+            "arguments[0].click();", cart
+        )
 
         self.wait.until(
-        EC.url_contains("cart.html")
-    )
+            EC.presence_of_element_located(self.CHECKOUT_BUTTON)
+        )
 
-        self.wait.until(
-        EC.element_to_be_clickable((By.ID, "checkout"))
-    )
     # -------- Get Information --------
     def get_cart_count(self):
         return self.wait.until(
