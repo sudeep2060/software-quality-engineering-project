@@ -23,17 +23,17 @@ class CheckoutPage:
 
     def click_checkout(self):
         checkout = self.wait.until(
-        EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
-    )
+            EC.element_to_be_clickable(self.CHECKOUT_BUTTON)
+        )
 
         self.driver.execute_script(
-        "arguments[0].click();",
-        checkout
-    )
+            "arguments[0].click();",
+            checkout
+        )
 
         self.wait.until(
-        EC.visibility_of_element_located(self.FIRST_NAME)
-    )
+            EC.visibility_of_element_located(self.FIRST_NAME)
+        )
 
     def enter_first_name(self, firstname):
         field = self.wait.until(
@@ -43,29 +43,46 @@ class CheckoutPage:
         field.send_keys(firstname)
 
     def enter_last_name(self, lastname):
-        field = self.driver.find_element(*self.LAST_NAME)
+        field = self.wait.until(
+            EC.visibility_of_element_located(self.LAST_NAME)
+        )
         field.clear()
         field.send_keys(lastname)
 
     def enter_postal_code(self, postal):
-        field = self.driver.find_element(*self.POSTAL_CODE)
+        field = self.wait.until(
+            EC.visibility_of_element_located(self.POSTAL_CODE)
+        )
         field.clear()
         field.send_keys(postal)
 
     def click_continue(self):
-        self.driver.find_element(*self.CONTINUE_BUTTON).click()
+        continue_button = self.wait.until(
+            EC.element_to_be_clickable(self.CONTINUE_BUTTON)
+        )
 
-        # If validation error appears, print it
+        self.driver.execute_script(
+            "arguments[0].click();",
+            continue_button
+        )
+
         errors = self.driver.find_elements(*self.ERROR_MESSAGE)
         if errors:
-            print("Checkout Error:", errors[0].text)
+            raise AssertionError(f"Checkout validation failed: {errors[0].text}")
 
         self.wait.until(
-            EC.presence_of_element_located(self.FINISH_BUTTON)
+            EC.element_to_be_clickable(self.FINISH_BUTTON)
         )
 
     def click_finish(self):
-        self.driver.find_element(*self.FINISH_BUTTON).click()
+        finish_button = self.wait.until(
+            EC.element_to_be_clickable(self.FINISH_BUTTON)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            finish_button
+        )
 
         self.wait.until(
             EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
@@ -80,4 +97,6 @@ class CheckoutPage:
         self.click_finish()
 
     def get_success_message(self):
-        return self.driver.find_element(*self.SUCCESS_MESSAGE).text
+        return self.wait.until(
+            EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
+        ).text
