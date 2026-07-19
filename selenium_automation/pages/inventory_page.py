@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class InventoryPage:
@@ -15,23 +17,44 @@ class InventoryPage:
     # -------- Constructor --------
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
 
     # -------- Actions --------
     def add_backpack(self):
-        self.driver.find_element(*self.ADD_BACKPACK).click()
+        self.wait.until(
+            EC.element_to_be_clickable(self.ADD_BACKPACK)
+        ).click()
+
+        # Wait until cart badge appears
+        self.wait.until(
+            EC.visibility_of_element_located(self.CART_BADGE)
+        )
 
     def remove_backpack(self):
-        self.driver.find_element(*self.REMOVE_BACKPACK).click()
+        self.wait.until(
+            EC.element_to_be_clickable(self.REMOVE_BACKPACK)
+        ).click()
 
     def open_cart(self):
-        self.driver.find_element(*self.CART_ICON).click()
+        self.wait.until(
+            EC.element_to_be_clickable(self.CART_ICON)
+        ).click()
+
+        # Wait until cart page is loaded
+        self.wait.until(
+            EC.url_contains("cart")
+        )
 
     # -------- Get Information --------
     def get_cart_count(self):
-        return self.driver.find_element(*self.CART_BADGE).text
+        return self.wait.until(
+            EC.visibility_of_element_located(self.CART_BADGE)
+        ).text
 
     def get_first_product_name(self):
-        return self.driver.find_element(*self.PRODUCT_NAME).text
+        return self.wait.until(
+            EC.visibility_of_element_located(self.PRODUCT_NAME)
+        ).text
 
     # -------- Verification --------
     def is_cart_badge_displayed(self):
