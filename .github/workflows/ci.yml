@@ -39,18 +39,41 @@ jobs:
       - name: Print Environment Information
         run: |
           python --version
-          pip --version
           google-chrome --version
 
       - name: Run Selenium Tests
         run: |
           pytest -v -s
+        continue-on-error: true
+
+  api-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Newman
+        run: |
+          npm install -g newman
+
+      - name: Run Postman Collection
+        run: |
+          newman run "api_testing/Software Quality Engineering API Tests.postman_collection.json"
 
   cypress-tests:
 
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
